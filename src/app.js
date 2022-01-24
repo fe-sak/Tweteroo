@@ -17,7 +17,7 @@ app.post('/sign-up', (req, res) => {
       username: req.body.username,
       avatar: req.body.avatar,
     });
-    res.send('OK');
+    res.status(201).send('OK');
   } else res.status(400).json({ error: 'Todos os campos são obrigatórios!' });
 });
 
@@ -34,7 +34,7 @@ app.post('/tweets', (req, res) => {
       avatar: findAvatar(req.body.username),
       tweet: req.body.tweet,
     });
-    res.send('Ok');
+    res.status(201).send('Ok');
   } else res.status(400).json({ error: 'Todos os campos são obrigatórios!' });
 });
 
