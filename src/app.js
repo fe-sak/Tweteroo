@@ -1,5 +1,6 @@
 import express from 'express';
 import cors from 'cors';
+import findAvatar from './findAvatar.js';
 
 const app = express();
 
@@ -9,16 +10,6 @@ app.use(express.json());
 let users = [];
 
 let tweets = [];
-
-function findAvatar(username) {
-  let avatar;
-  users.forEach((user) => {
-    if (username === user.username) {
-      avatar = user.avatar;
-    }
-  });
-  return avatar;
-}
 
 app.post('/sign-up', (req, res) => {
   if (req.body.username && req.body.avatar) {
@@ -55,7 +46,7 @@ app.post('/tweets', (req, res) => {
   if (req.headers.user && req.body.tweet) {
     tweets.push({
       username: req.headers.user,
-      avatar: findAvatar(req.headers.user),
+      avatar: findAvatar(users, req.headers.user),
       tweet: req.body.tweet,
     });
     res.status(201).send('Ok');
