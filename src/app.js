@@ -12,12 +12,13 @@ console.log(users);
 let tweets = [];
 
 app.post('/sign-up', (req, res) => {
-  users.push({
-    username: req.body.username,
-    avatar: req.body.avatar,
-  });
-
-  res.send('OK');
+  if (req.body.username && req.body.avatar) {
+    users.push({
+      username: req.body.username,
+      avatar: req.body.avatar,
+    });
+    res.send('OK');
+  } else res.status(400).json({ error: 'Todos os campos são obrigatórios!' });
 });
 
 app.get('/tweets', (req, res) => {
@@ -27,12 +28,14 @@ app.get('/tweets', (req, res) => {
 });
 
 app.post('/tweets', (req, res) => {
-  tweets.push({
-    username: req.body.username,
-    avatar: findAvatar(req.body.username),
-    tweet: req.body.tweet,
-  });
-  res.send('Ok');
+  if (req.body.username && req.body.tweet) {
+    tweets.push({
+      username: req.body.username,
+      avatar: findAvatar(req.body.username),
+      tweet: req.body.tweet,
+    });
+    res.send('Ok');
+  } else res.status(400).json({ error: 'Todos os campos são obrigatórios!' });
 });
 
 function findAvatar(username) {
