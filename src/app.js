@@ -7,7 +7,6 @@ app.use(cors());
 app.use(express.json());
 
 let users = [];
-console.log(users);
 
 let tweets = [];
 
@@ -32,10 +31,16 @@ app.post('/sign-up', (req, res) => {
 });
 
 app.get('/tweets', (req, res) => {
-  console.log(req.query);
-  let tweetsToSend = tweets.slice(-10);
-  tweetsToSend = tweetsToSend.reverse();
-  res.send(tweetsToSend);
+  let { page } = req.query;
+  page = parseInt(page);
+  if (page) {
+    let tweetsToSend = [...tweets].reverse();
+
+    tweetsToSend = tweetsToSend.splice((page - 1) * 10);
+    tweetsToSend = tweetsToSend.slice(0, 10);
+
+    res.send(tweetsToSend);
+  } else res.status(400).json({ error: 'Informe uma página válida!' });
 });
 
 app.post('/tweets', (req, res) => {
@@ -45,7 +50,6 @@ app.post('/tweets', (req, res) => {
       avatar: findAvatar(req.headers.user),
       tweet: req.body.tweet,
     });
-    console.log(tweets);
     res.status(201).send('Ok');
   } else res.status(400).json({ error: 'Todos os campos são obrigatórios!' });
 });
