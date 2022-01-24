@@ -43,6 +43,14 @@ app.get('/tweets', (req, res) => {
   } else res.status(400).json({ error: 'Informe uma página válida!' });
 });
 
+app.get('/tweets/:username', (req, res) => {
+  if (req.params.username) {
+    res.send([
+      ...tweets.filter((tweet) => tweet.username === req.params.username),
+    ]);
+  } else res.sendStatus(400);
+});
+
 app.post('/tweets', (req, res) => {
   if (req.headers.user && req.body.tweet) {
     tweets.push({
